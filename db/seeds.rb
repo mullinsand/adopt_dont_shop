@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 app1 = Application.create(fname: 'John', lname: 'Smithson', street_address: '12324 Turing Blvd.', city: 'Dtown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasons', status: "In Progress" )
-app2 = Application.create(fname: 'Jane', lname: 'Smithsonion', street_address: '34521 Avening Blvd.', city: 'Tdown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasons', status: "Pending" )
+app2 = Application.create(fname: 'Jane', lname: 'Smithsonion', street_address: '34521 Avening Blvd.', city: 'Tdown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasons', status: "Accepted" )
 app3 = Application.create!(fname: 'ohn', lname: 'mith', street_address: '234 Turig Blvd.', city: 'Ttown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasonsae', status: "Pending" )
 app4 = Application.create!(fname: 'hn', lname: 'ith', street_address: '34 Turig Blvd.', city: 'Ttown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasonsa', status: "Pending" )
 
