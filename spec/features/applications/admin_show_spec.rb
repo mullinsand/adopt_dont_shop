@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Approving/rejecting applications' do
+RSpec.describe 'the admin application show' do
   before :each do
     @app1 = Application.create!(fname: 'John', lname: 'Smithson', street_address: '12324 Turing Blvd.', city: 'Dtown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasons', status: "Pending" )
 
@@ -47,10 +47,11 @@ RSpec.describe 'Approving/rejecting applications' do
         visit "/admin/applications/#{@app1.id}"
 
         click_button "Approve #{@pet4.name} Adoption"
-        
+
         within "#pet_#{@pet4.id}" do
           expect(page).to have_content("Adoption Approved")
           expect(page).to_not have_button("Approve #{@pet4.name} Adoption")
+          expect(page).to_not have_button("Reject #{@pet4.name} Adoption")
         end
       end
 
@@ -79,7 +80,9 @@ RSpec.describe 'Approving/rejecting applications' do
 
         within "#pet_#{@pet4.id}" do
           expect(page).to have_content("Adoption Rejected")
+          expect(page).to_not have_content("Adoption Approved")
           expect(page).to_not have_button("Reject #{@pet4.name} Adoption")
+          expect(page).to_not have_button("Accept #{@pet4.name} Adoption")
         end
       end
     end
@@ -96,11 +99,15 @@ RSpec.describe 'Approving/rejecting applications' do
 
           within "#pet_#{@pet1.id}" do
             expect(page).to_not have_content("Adoption Approved")
+            expect(page).to_not have_content("Adoption Rejected")
             expect(page).to have_button("Approve #{@pet1.name} Adoption")
+            expect(page).to have_button("Reject #{@pet1.name} Adoption")
           end
 
           within "#pet_#{@pet5.id}" do
+            expect(page).to_not have_content("Adoption Approved")
             expect(page).to_not have_content("Adoption Rejected")
+            expect(page).to have_button("Approve #{@pet5.name} Adoption")
             expect(page).to have_button("Reject #{@pet5.name} Adoption")
           end
         end
@@ -112,6 +119,7 @@ RSpec.describe 'Approving/rejecting applications' do
         visit "/admin/applications/#{@app2.id}"
 
         within "#application_#{@app2.id}" do
+          expect(page).to have_content("Pending")
           expect(page).to_not have_content("Accepted")
         end
 
@@ -119,6 +127,7 @@ RSpec.describe 'Approving/rejecting applications' do
         click_button "Approve #{@pet5.name} Adoption"
 
         within "#application_#{@app2.id}" do
+          expect(page).to_not have_content("Pending")
           expect(page).to have_content("Accepted")
         end
       end
@@ -129,6 +138,7 @@ RSpec.describe 'Approving/rejecting applications' do
         visit "/admin/applications/#{@app2.id}"
 
         within "#application_#{@app2.id}" do
+          expect(page).to have_content("Pending")
           expect(page).to_not have_content("Rejected")
         end
 
@@ -136,6 +146,7 @@ RSpec.describe 'Approving/rejecting applications' do
         click_button "Approve #{@pet5.name} Adoption"
 
         within "#application_#{@app2.id}" do
+          expect(page).to_not have_content("Pending")
           expect(page).to have_content("Rejected")
         end
       end
@@ -177,10 +188,12 @@ RSpec.describe 'Approving/rejecting applications' do
 
         within "#pet_#{@pet1.id}" do
           expect(page).to_not have_button("Approve #{@pet1.name} Adoption")
+          expect(page).to have_button("Reject #{@pet1.name} Adoption")
         end
 
         within "#pet_#{@pet5.id}" do
           expect(page).to_not have_button("Approve #{@pet5.name} Adoption")
+          expect(page).to have_button("Reject #{@pet5.name} Adoption")
         end
       end
 
@@ -193,11 +206,13 @@ RSpec.describe 'Approving/rejecting applications' do
         visit "/admin/applications/#{@app1.id}"
 
         within "#pet_#{@pet1.id}" do
+          expect(page).to_not have_button("Approve #{@pet1.name} Adoption")
           expect(page).to have_content("*Already approved for adoption*")
           expect(page).to have_button("Reject #{@pet1.name} Adoption")
         end
 
         within "#pet_#{@pet5.id}" do
+          expect(page).to_not have_button("Approve #{@pet5.name} Adoption")
           expect(page).to have_content("*Already approved for adoption*")
           expect(page).to have_button("Reject #{@pet5.name} Adoption")
         end

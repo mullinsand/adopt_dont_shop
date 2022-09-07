@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'the pets index' do
+RSpec.describe 'application create' do
   before :each do
     @app1 = Application.create!(fname: 'John', lname: 'Smithson', street_address: '12324 Turing Blvd.', city: 'Dtown', state: 'CO', zip_code: 12345, good_home_argument: 'Because reasons', status: "In Progress" )
 
@@ -47,6 +47,9 @@ RSpec.describe 'the pets index' do
           expect(page).to have_content("State")
           expect(page).to have_content("Zip Code")
           expect(page).to have_button("Submit")
+
+          expect(page).to_not have_content("Pet Name")
+          expect(page).to_not have_content("Shelter Name")
         end
 
         it "Submit takes user to application's show page (another test same as this in spec/features/applications/show_spec.rb)" do
@@ -120,6 +123,8 @@ RSpec.describe 'the pets index' do
           click_button 'Submit'
 
           expect(page).to have_content("You must fill out all fields to submit the application")
+          expect(page).to_not have_content("In Progress")
+          expect(page).to_not have_content("Pending")
         end
       end
     end
