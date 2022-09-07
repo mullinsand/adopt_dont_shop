@@ -74,7 +74,7 @@ RSpec.describe Pet, type: :model do
 
   describe 'class methods' do
     describe '#add_pet_status' do
-      it 'does a thing' do
+      it 'returns a pet with given metrics' do
         expect(Pet.add_pet_status(Application.itself).first).to eq(@pet_1)
       end
     end

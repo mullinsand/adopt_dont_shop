@@ -5,16 +5,21 @@ class Pet < ApplicationRecord
   has_many :pet_applications
   has_many :applications, through: :pet_applications
 
+  scope :is_adoptable, -> (is_adoptable = true) {where(adoptable: is_adoptable)}
+  scope :applications_status, -> (status = "Pending") {where("applications.status = ?", status)}
+  scope :pets_status, -> {select('pet_applications.pet_status')}
+  scope :apps_status, -> {select("applications.status as application_status")}
+
   def shelter_name
     shelter.name
   end
 
   def self.adoptable
-    where(adoptable: true)
+    is_adoptable
   end
 
   def self.add_pet_status(params)
-    select('pets.*, pet_applications.pet_status, pet_applications.application_id as app_id').joins(:pet_applications).distinct
+    select('pets.*', 'pet_applications.application_id as app_id').pets_status.joins(:pet_applications).distinct
   end
 
   def self.pending_apps
@@ -26,14 +31,14 @@ class Pet < ApplicationRecord
   end
 
   def self.count_adoptable
-    adoptable.count
+    is_adoptable.count
   end
 
   def self.adopted_pet_count
-    where(adoptable: false).count
+    is_adoptable(false).count
   end
 
   def self.pet_app_pending(shelter_id)
-    Pet.select("pets.name as pet_name", "pets.shelter_id as shelter_id", "pet_applications.pet_status as pet_status", "applications.id as application_id", "applications.status as application_status").joins(:applications).where("applications.status = ?", "Pending").where("shelter_id = ?", shelter_id)
+    select("pets.name as pet_name", "pets.shelter_id as shelter_id", "applications.id as application_id").pets_status.apps_status.joins(:applications).applications_status.where("shelter_id = ?", shelter_id)
   end
 end

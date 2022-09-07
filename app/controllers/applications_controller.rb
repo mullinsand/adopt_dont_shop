@@ -30,7 +30,6 @@ class ApplicationsController < ApplicationController
   def admin_show
     @application = Application.find(params[:id])
     @application_pet_join = @application.pets.add_pet_status(params)
-    # require 'pry'; binding.pry
   end
 
   private
